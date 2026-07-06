@@ -271,7 +271,7 @@ function renderLogin() {
         <div class="login-art">
           <div class="brand-mark">D</div>
           <div>
-            <h1>DONGMYUNGSTAGRAM</h1>
+            <h1>DMSTAGRAM</h1>
             <p>동명스타그램</p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-# DONGMYUNGSTAGRAM Prototype
+# DMSTAGRAM Prototype
 
 Google Sheet:
 https://docs.google.com/spreadsheets/d/1OZGTdNwoN3S73hebXC-pjJ7QU5Tn4emTkEY7pQLvvJc/edit

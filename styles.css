@@ -450,13 +450,16 @@ textarea:disabled {
   z-index: 30;
   display: grid;
   place-items: center;
-  padding: 18px;
+  padding: clamp(10px, 2vh, 18px);
   background: rgba(17, 24, 39, 0.52);
 }
 
 .detail-panel {
   width: min(100%, 980px);
-  max-height: min(92vh, 820px);
+  height: min(820px, calc(100vh - 36px));
+  height: min(820px, calc(100dvh - 36px));
+  max-height: calc(100vh - 36px);
+  max-height: calc(100dvh - 36px);
   display: grid;
   grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
   overflow: hidden;
@@ -466,7 +469,8 @@ textarea:disabled {
 }
 
 .carousel-stage {
-  min-height: 620px;
+  min-height: 0;
+  height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -475,6 +479,7 @@ textarea:disabled {
 
 .card-slide {
   flex: 1;
+  min-height: 0;
   position: relative;
   display: grid;
   align-content: center;
@@ -548,11 +553,13 @@ textarea:disabled {
   display: grid;
   place-items: center;
   padding: 18px;
+  overflow: hidden;
 }
 
 .card-image {
   aspect-ratio: 4 / 5;
-  width: min(100%, 520px);
+  width: auto;
+  max-width: min(100%, 520px);
   height: auto;
   max-height: 100%;
   object-fit: contain;
@@ -616,6 +623,7 @@ textarea:disabled {
   min-height: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   border-left: 1px solid var(--line);
 }
 
@@ -746,7 +754,7 @@ textarea:disabled {
 
 .comment-form textarea {
   min-height: 78px;
-  resize: vertical;
+  resize: none;
 }
 
 .action-status {
@@ -841,18 +849,24 @@ textarea:disabled {
   }
 
   .detail-panel {
-    max-height: 94vh;
+    height: calc(100vh - 20px);
+    height: calc(100dvh - 20px);
+    max-height: calc(100vh - 20px);
+    max-height: calc(100dvh - 20px);
     grid-template-columns: 1fr;
-    overflow: auto;
+    grid-template-rows: minmax(280px, 52%) minmax(0, 1fr);
+    overflow: hidden;
   }
 
   .carousel-stage {
-    min-height: 460px;
+    min-height: 0;
+    height: 100%;
   }
 
   .detail-side {
     border-left: 0;
     border-top: 1px solid var(--line);
+    min-height: 0;
   }
 }
 
@@ -895,7 +909,23 @@ textarea:disabled {
     font-size: 34px;
   }
 
-  .card-slide {
-    min-height: 390px;
+  .detail-overlay {
+    padding: 8px;
+  }
+
+  .detail-panel {
+    height: calc(100vh - 16px);
+    height: calc(100dvh - 16px);
+    max-height: calc(100vh - 16px);
+    max-height: calc(100dvh - 16px);
+    grid-template-rows: minmax(250px, 47%) minmax(0, 1fr);
+  }
+
+  .carousel-controls {
+    height: 56px;
+  }
+
+  .comment-form textarea {
+    min-height: 60px;
   }
 }
