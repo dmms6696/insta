@@ -363,8 +363,8 @@ function renderApp() {
         <div class="topbar-title">
           <div class="search-icon">${iconSearch()}</div>
           <div>
-            <h1>탐색</h1>
-            <p>${escapeHtml(currentUser.className)} · ${escapeHtml(currentUser.displayName)}</p>
+            <h1>DMSTAGRAM</h1>
+            <p>탐색 · ${escapeHtml(currentUser.className)} · ${escapeHtml(currentUser.displayName)}</p>
           </div>
         </div>
         <div class="topbar-actions">
