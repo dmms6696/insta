@@ -22,12 +22,12 @@ const seedData = {
     { postId: "p006", title: "수학 풀이 공유 방법", category: "수학", authorName: "김하늘 선생님", thumbnailLabel: "수학", coverColor: "#06B6D4", createdAt: "2026-07-06T09:20:00+09:00", visibility: "class", sortOrder: 6 },
   ],
   cards: [
-    { cardId: "c001", postId: "p001", slideOrder: 1, headline: "등교하면 먼저 인사하기", body: "교실에 들어오면 선생님과 친구에게 밝게 인사해요.", accentColor: "#F97316" },
-    { cardId: "c002", postId: "p001", slideOrder: 2, headline: "준비물은 책상 오른쪽", body: "필통, 알림장, 오늘 쓸 책을 꺼내고 가방은 정리해요.", accentColor: "#FDBA74" },
-    { cardId: "c003", postId: "p001", slideOrder: 3, headline: "아침 질문에 답하기", body: "칠판의 오늘 질문을 읽고 짧게 생각을 적어 봐요.", accentColor: "#FB923C" },
-    { cardId: "c004", postId: "p002", slideOrder: 1, headline: "보안경과 장갑 확인", body: "실험 전 보호 장비를 먼저 착용하고 친구 장비도 확인해요.", accentColor: "#14B8A6" },
-    { cardId: "c005", postId: "p002", slideOrder: 2, headline: "냄새는 손으로 부채질", body: "용액 냄새를 직접 맡지 않고 손으로 살짝 부채질해요.", accentColor: "#5EEAD4" },
-    { cardId: "c006", postId: "p002", slideOrder: 3, headline: "결과는 바로 기록", body: "관찰한 사실과 생각을 나누어 적으면 발표가 쉬워져요.", accentColor: "#2DD4BF" },
+    { cardId: "c001", postId: "p001", slideOrder: 1, headline: "등교하면 먼저 인사하기", body: "교실에 들어오면 선생님과 친구에게 밝게 인사해요.", accentColor: "#F97316", imageUrl: "cards/p001-01.png", imageAlt: "Morning Check test card news image" },
+    { cardId: "c002", postId: "p001", slideOrder: 2, headline: "준비물은 책상 오른쪽", body: "필통, 알림장, 오늘 쓸 책을 꺼내고 가방은 정리해요.", accentColor: "#FDBA74", imageUrl: "cards/p001-02.png", imageAlt: "Desk Ready test card news image" },
+    { cardId: "c003", postId: "p001", slideOrder: 3, headline: "아침 질문에 답하기", body: "칠판의 오늘 질문을 읽고 짧게 생각을 적어 봐요.", accentColor: "#FB923C", imageUrl: "cards/p001-03.png", imageAlt: "Question Time test card news image" },
+    { cardId: "c004", postId: "p002", slideOrder: 1, headline: "보안경과 장갑 확인", body: "실험 전 보호 장비를 먼저 착용하고 친구 장비도 확인해요.", accentColor: "#14B8A6", imageUrl: "cards/p002-01.png", imageAlt: "Safety First test card news image" },
+    { cardId: "c005", postId: "p002", slideOrder: 2, headline: "냄새는 손으로 부채질", body: "용액 냄새를 직접 맡지 않고 손으로 살짝 부채질해요.", accentColor: "#5EEAD4", imageUrl: "cards/p002-02.png", imageAlt: "Observe test card news image" },
+    { cardId: "c006", postId: "p002", slideOrder: 3, headline: "결과는 바로 기록", body: "관찰한 사실과 생각을 나누어 적으면 발표가 쉬워져요.", accentColor: "#2DD4BF", imageUrl: "cards/p002-03.png", imageAlt: "Record test card news image" },
     { cardId: "c007", postId: "p003", slideOrder: 1, headline: "칭찬 한 가지 먼저", body: "친구 글에서 좋았던 점을 구체적으로 찾아 댓글을 시작해요.", accentColor: "#6366F1" },
     { cardId: "c008", postId: "p003", slideOrder: 2, headline: "고칠 점은 부드럽게", body: "명령보다 제안으로 말하면 친구가 편하게 받아들일 수 있어요.", accentColor: "#A5B4FC" },
     { cardId: "c009", postId: "p003", slideOrder: 3, headline: "개인정보는 쓰지 않기", body: "전화번호, 주소, 사적인 이야기는 댓글에 남기지 않아요.", accentColor: "#818CF8" },
@@ -76,12 +76,43 @@ function cloneSeed() {
   return JSON.parse(JSON.stringify(seedData));
 }
 
+function mergeRowsById(seedRows, savedRows, idKey) {
+  if (!Array.isArray(savedRows)) return seedRows;
+  const savedById = new Map(savedRows.map((row) => [row[idKey], row]));
+  const mergedRows = seedRows.map((seedRow) => {
+    const savedRow = savedById.get(seedRow[idKey]);
+    if (!savedRow) return seedRow;
+    const merged = { ...seedRow };
+    Object.entries(savedRow).forEach(([key, value]) => {
+      if (value !== undefined && value !== "") {
+        merged[key] = value;
+      }
+    });
+    return merged;
+  });
+
+  savedRows.forEach((savedRow) => {
+    if (!seedRows.some((seedRow) => seedRow[idKey] === savedRow[idKey])) {
+      mergedRows.push(savedRow);
+    }
+  });
+
+  return mergedRows;
+}
+
 function loadState() {
   const saved = localStorage.getItem(storageKey);
   if (!saved) return cloneSeed();
   try {
     const parsed = JSON.parse(saved);
-    return { ...cloneSeed(), ...parsed };
+    const seed = cloneSeed();
+    return {
+      ...seed,
+      ...parsed,
+      users: mergeRowsById(seed.users, parsed.users, "userId"),
+      posts: mergeRowsById(seed.posts, parsed.posts, "postId"),
+      cards: mergeRowsById(seed.cards, parsed.cards, "cardId"),
+    };
   } catch {
     return cloneSeed();
   }
