@@ -58,7 +58,9 @@ git push
    - Branch: `main`
    - Folder: `/root`
 4. Save.
-5. Wait for GitHub to show the Pages URL.
+5. Wait a few minutes for GitHub to show the Pages URL.
+
+This project does not need a GitHub Actions workflow because it is a plain static site. If you previously added `.github/workflows/deploy-pages.yml`, delete it from the repository or disable that workflow.
 
 ## 5. Test
 

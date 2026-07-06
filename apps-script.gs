@@ -1,18 +1,18 @@
-const SPREADSHEET_ID = "1OZGTdNwoN3S73hebXC-pjJ7QU5Tn4emTkEY7pQLvvJc";
-const SESSION_TTL_SECONDS = 21600;
+var SPREADSHEET_ID = "1OZGTdNwoN3S73hebXC-pjJ7QU5Tn4emTkEY7pQLvvJc";
+var SESSION_TTL_SECONDS = 21600;
 
 function doGet() {
   return jsonResponse({ ok: true, service: "Class Explore Cards" });
 }
 
 function doPost(event) {
-  const body = JSON.parse((event.postData && event.postData.contents) || "{}");
+  var body = JSON.parse((event.postData && event.postData.contents) || "{}");
 
   if (body.type === "login") {
     return handleLogin_(body.payload || {});
   }
 
-  const user = getUserByToken_(body.token);
+  var user = getUserByToken_(body.token);
   if (!user) {
     return jsonResponse({ ok: false, error: "AUTH_REQUIRED" });
   }
@@ -35,57 +35,74 @@ function doPost(event) {
 }
 
 function handleLogin_(payload) {
-  const displayName = String(payload.displayName || "").trim();
-  const loginCode = String(payload.loginCode || "").trim();
-  const user = rowsToObjects_("Users").find((item) => (
-    String(item.displayName).trim() === displayName &&
-    String(item.loginCode).trim() === loginCode
-  ));
+  var displayName = String(payload.displayName || "").trim();
+  var loginCode = String(payload.loginCode || "").trim();
+  var users = rowsToObjects_("Users");
+  var user = null;
+
+  for (var i = 0; i < users.length; i += 1) {
+    if (
+      String(users[i].displayName).trim() === displayName &&
+      String(users[i].loginCode).trim() === loginCode
+    ) {
+      user = users[i];
+      break;
+    }
+  }
 
   if (!user) {
     return jsonResponse({ ok: false, error: "INVALID_LOGIN" });
   }
 
-  const token = Utilities.getUuid();
+  var token = Utilities.getUuid();
   CacheService.getScriptCache().put(
-    `session:${token}`,
+    "session:" + token,
     JSON.stringify({ userId: user.userId }),
     SESSION_TTL_SECONDS
   );
 
   return jsonResponse({
     ok: true,
-    token,
+    token: token,
     user: sanitizeUser_(user),
-    data: buildClientData_(user),
+    data: buildClientData_(user)
   });
 }
 
 function getUserByToken_(token) {
   if (!token) return null;
-  const cached = CacheService.getScriptCache().get(`session:${token}`);
+
+  var cached = CacheService.getScriptCache().get("session:" + token);
   if (!cached) return null;
-  const session = JSON.parse(cached);
-  return rowsToObjects_("Users").find((user) => user.userId === session.userId) || null;
+
+  var session = JSON.parse(cached);
+  var users = rowsToObjects_("Users");
+  for (var i = 0; i < users.length; i += 1) {
+    if (users[i].userId === session.userId) {
+      return users[i];
+    }
+  }
+  return null;
 }
 
 function buildClientData_(viewer) {
-  const users = rowsToObjects_("Users");
-  const posts = rowsToObjects_("Posts");
-  const cards = rowsToObjects_("Cards");
-  const likes = rowsToObjects_("Likes");
-  const comments = rowsToObjects_("Comments");
+  var users = rowsToObjects_("Users");
+  var posts = rowsToObjects_("Posts");
+  var cards = rowsToObjects_("Cards");
+  var likes = rowsToObjects_("Likes");
+  var comments = rowsToObjects_("Comments");
+  var publicLikes = [];
 
-  const publicLikes = [];
-  likes.forEach((like, index) => {
+  for (var i = 0; i < likes.length; i += 1) {
+    var like = likes[i];
     if (like.status === "active") {
       publicLikes.push({
-        likeId: like.userId === viewer.userId ? like.likeId : `active-${index}`,
+        likeId: like.userId === viewer.userId ? like.likeId : "active-" + i,
         postId: like.postId,
         userId: like.userId === viewer.userId ? viewer.userId : "",
         likedAt: like.likedAt,
         status: "active",
-        cancelledAt: "",
+        cancelledAt: ""
       });
     } else if (like.userId === viewer.userId) {
       publicLikes.push({
@@ -94,27 +111,37 @@ function buildClientData_(viewer) {
         userId: viewer.userId,
         likedAt: like.likedAt,
         status: "cancelled",
-        cancelledAt: like.cancelledAt,
+        cancelledAt: like.cancelledAt
       });
     }
-  });
+  }
 
   return {
     user: sanitizeUser_(viewer),
-    users: users.map(sanitizeUser_),
-    posts,
-    cards,
+    users: sanitizeUsers_(users),
+    posts: posts,
+    cards: cards,
     likes: publicLikes,
-    comments,
-    teacherLikeAudit: viewer.role === "teacher" ? buildTeacherLikeAudit_(likes, posts, users) : [],
+    comments: comments,
+    teacherLikeAudit: viewer.role === "teacher" ? buildTeacherLikeAudit_(likes, posts, users) : []
   };
 }
 
+function sanitizeUsers_(users) {
+  var result = [];
+  for (var i = 0; i < users.length; i += 1) {
+    result.push(sanitizeUser_(users[i]));
+  }
+  return result;
+}
+
 function buildTeacherLikeAudit_(likes, posts, users) {
-  return likes.map((like) => {
-    const post = posts.find((item) => item.postId === like.postId) || {};
-    const user = users.find((item) => item.userId === like.userId) || {};
-    return {
+  var result = [];
+  for (var i = 0; i < likes.length; i += 1) {
+    var like = likes[i];
+    var post = findById_(posts, "postId", like.postId) || {};
+    var user = findById_(users, "userId", like.userId) || {};
+    result.push({
       likeId: like.likeId,
       postId: like.postId,
       postTitle: post.title || like.postId,
@@ -123,23 +150,41 @@ function buildTeacherLikeAudit_(likes, posts, users) {
       role: user.role || "",
       status: like.status,
       likedAt: like.likedAt,
-      cancelledAt: like.cancelledAt,
-    };
-  });
+      cancelledAt: like.cancelledAt
+    });
+  }
+  return result;
+}
+
+function findById_(items, key, value) {
+  for (var i = 0; i < items.length; i += 1) {
+    if (items[i][key] === value) {
+      return items[i];
+    }
+  }
+  return null;
 }
 
 function upsertLike_(like, user) {
-  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Likes");
-  const lastRow = Math.max(sheet.getLastRow(), 1);
-  const values = lastRow > 1 ? sheet.getRange(2, 1, lastRow - 1, 6).getValues() : [];
-  const rowIndex = values.findIndex((row) => row[1] === like.postId && row[2] === user.userId);
-  const row = [
-    like.likeId || `l${Date.now()}`,
+  var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Likes");
+  var lastRow = Math.max(sheet.getLastRow(), 1);
+  var values = lastRow > 1 ? sheet.getRange(2, 1, lastRow - 1, 6).getValues() : [];
+  var rowIndex = -1;
+
+  for (var i = 0; i < values.length; i += 1) {
+    if (values[i][1] === like.postId && values[i][2] === user.userId) {
+      rowIndex = i;
+      break;
+    }
+  }
+
+  var row = [
+    like.likeId || "l" + Date.now(),
     like.postId,
     user.userId,
     toDateOrBlank_(like.likedAt),
     like.status,
-    toDateOrBlank_(like.cancelledAt),
+    toDateOrBlank_(like.cancelledAt)
   ];
 
   if (rowIndex >= 0) {
@@ -150,30 +195,42 @@ function upsertLike_(like, user) {
 }
 
 function appendComment_(comment, user) {
-  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Comments");
+  var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Comments");
   sheet.appendRow([
-    comment.commentId || `cm${Date.now()}`,
+    comment.commentId || "cm" + Date.now(),
     comment.postId,
     user.userId,
     comment.commentText,
-    toDateOrBlank_(comment.createdAt),
+    toDateOrBlank_(comment.createdAt)
   ]);
 }
 
 function rowsToObjects_(sheetName) {
-  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(sheetName);
-  const values = sheet.getDataRange().getValues();
-  const headers = values.shift();
-  return values
-    .filter((row) => row.some((cell) => cell !== ""))
-    .map((row) => {
-      const item = {};
-      headers.forEach((header, index) => {
-        const value = row[index];
-        item[header] = value instanceof Date ? value.toISOString() : value;
-      });
-      return item;
-    });
+  var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(sheetName);
+  var values = sheet.getDataRange().getValues();
+  var headers = values.shift();
+  var result = [];
+
+  for (var rowIndex = 0; rowIndex < values.length; rowIndex += 1) {
+    var row = values[rowIndex];
+    var hasValue = false;
+    for (var cellIndex = 0; cellIndex < row.length; cellIndex += 1) {
+      if (row[cellIndex] !== "") {
+        hasValue = true;
+        break;
+      }
+    }
+    if (!hasValue) continue;
+
+    var item = {};
+    for (var headerIndex = 0; headerIndex < headers.length; headerIndex += 1) {
+      var value = row[headerIndex];
+      item[headers[headerIndex]] = value instanceof Date ? value.toISOString() : value;
+    }
+    result.push(item);
+  }
+
+  return result;
 }
 
 function sanitizeUser_(user) {
@@ -182,7 +239,7 @@ function sanitizeUser_(user) {
     role: user.role,
     displayName: user.displayName,
     className: user.className,
-    avatarColor: user.avatarColor,
+    avatarColor: user.avatarColor
   };
 }
 
