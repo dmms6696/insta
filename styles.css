@@ -427,43 +427,6 @@ textarea:disabled {
   transform: rotate(-12deg);
 }
 
-.tile-content {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: clamp(12px, 2vw, 20px);
-}
-
-.tile-label {
-  width: 56px;
-  height: 56px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  color: #111827;
-  background: rgba(255, 255, 255, 0.9);
-  font-weight: 800;
-}
-
-.tile-meta {
-  display: grid;
-  gap: 7px;
-}
-
-.tile-meta strong {
-  font-size: clamp(16px, 2.2vw, 24px);
-  line-height: 1.2;
-  letter-spacing: 0;
-}
-
-.tile-meta span {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.82);
-}
-
 .tile-badge {
   position: absolute;
   z-index: 2;

@@ -277,7 +277,7 @@ function renderLogin() {
     <main class="login-screen">
       <section class="login-panel">
         <div class="login-art">
-          <div class="brand-mark">C</div>
+          <div class="brand-mark">D</div>
           <div>
             <h1>DONGMYUNGSTAGRAM</h1>
             <p>동명스타그램</p>
@@ -383,7 +383,7 @@ function renderApp() {
       <main class="main-area">
         <div class="toolbar">
           <div>
-            <h2>탐색</h2>
+            <h2>오늘의 게시물</h2>
             <small>${posts.length}개 게시물</small>
           </div>
           ${currentUser.role === "teacher" ? `<a class="ghost-btn" href="${SHEET_CONFIG.spreadsheetUrl}" target="_blank" rel="noreferrer">Google Sheet</a>` : ""}
@@ -424,13 +424,6 @@ function renderPostTile(post) {
   return `
     <button class="post-tile ${thumbnailImage ? "has-image" : ""}" type="button" data-open-post="${post.postId}" style="--cover:${post.coverColor}">
       ${thumbnailImage ? `<img class="tile-image" src="${escapeHtml(thumbnailImage)}" alt="" loading="lazy" />` : ""}
-      <div class="tile-content">
-        <div class="tile-label">${escapeHtml(post.thumbnailLabel)}</div>
-        <div class="tile-meta">
-          <strong>${escapeHtml(post.title)}</strong>
-          <span>${escapeHtml(post.category)} · ${escapeHtml(post.authorName)}</span>
-        </div>
-      </div>
       <span class="tile-badge">♥ ${likes} · 댓글 ${comments}</span>
     </button>
   `;

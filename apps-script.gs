@@ -2,7 +2,7 @@ var SPREADSHEET_ID = "1OZGTdNwoN3S73hebXC-pjJ7QU5Tn4emTkEY7pQLvvJc";
 var SESSION_TTL_SECONDS = 21600;
 
 function doGet() {
-  return jsonResponse({ ok: true, service: "Class Explore Cards" });
+  return jsonResponse({ ok: true, service: "DONGMYUNGSTAGRAM" });
 }
 
 function doPost(event) {
