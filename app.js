@@ -279,8 +279,8 @@ function renderLogin() {
         <div class="login-art">
           <div class="brand-mark">C</div>
           <div>
-            <h1>Class Explore Cards</h1>
-            <p>학급 게시물을 탐색하고 카드뉴스를 넘기며 반응을 남기는 공간</p>
+            <h1>DONGMYUNGSTAGRAM</h1>
+            <p>동명스타그램</p>
           </div>
         </div>
         <form class="login-form" id="loginForm">
@@ -383,7 +383,7 @@ function renderApp() {
       <main class="main-area">
         <div class="toolbar">
           <div>
-            <h2>오늘의 카드뉴스</h2>
+            <h2>탐색</h2>
             <small>${posts.length}개 게시물</small>
           </div>
           ${currentUser.role === "teacher" ? `<a class="ghost-btn" href="${SHEET_CONFIG.spreadsheetUrl}" target="_blank" rel="noreferrer">Google Sheet</a>` : ""}
