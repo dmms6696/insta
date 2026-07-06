@@ -37,6 +37,7 @@ Create a new GitHub repository, then upload every file in this folder:
 - `apps-script.gs`
 - `README.md`
 - `.nojekyll`
+- `cards/` image folder, including student card news image files
 
 You can upload through the GitHub website, or use git:
 
@@ -62,7 +63,27 @@ git push
 
 This project does not need a GitHub Actions workflow because it is a plain static site. If you previously added `.github/workflows/deploy-pages.yml`, delete it from the repository or disable that workflow.
 
-## 5. Test
+## 5. Add student card news images
+
+Put image files in the repository's `cards/` folder.
+
+Example:
+
+```text
+cards/p001-01.png
+cards/p001-02.png
+cards/p001-03.png
+```
+
+In the Google Sheet `Cards` tab, fill the `imageUrl` column with the same relative path:
+
+```text
+cards/p001-01.png
+```
+
+The app uses image slides when `imageUrl` is filled. If `imageUrl` is blank, it falls back to the text card fields: `headline`, `body`, and `accentColor`.
+
+## 6. Test
 
 Open the GitHub Pages URL and log in:
 

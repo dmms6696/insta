@@ -19,3 +19,5 @@ Test accounts:
 The prototype stores local interaction state in `localStorage`. To connect live writes to the Google Sheet, deploy `apps-script.gs` as a Google Apps Script Web App and set `SHEET_CONFIG.appsScriptUrl` in `app.js`.
 
 For GitHub Pages deployment, follow `GITHUB_DEPLOY.md`.
+
+Student-made card news images should go in the `cards/` folder. Put the same relative path, such as `cards/p001-01.png`, in the Google Sheet `Cards.imageUrl` column.

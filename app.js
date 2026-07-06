@@ -192,6 +192,23 @@ function cardsForPost(postId) {
     .sort((a, b) => a.slideOrder - b.slideOrder);
 }
 
+function firstCardImageForPost(postId) {
+  const card = cardsForPost(postId).find((item) => imageUrlForCard(item));
+  return card ? imageUrlForCard(card) : "";
+}
+
+function imageUrlForPost(post) {
+  return post.thumbnailImageUrl || post.thumbnailUrl || post.imageUrl || firstCardImageForPost(post.postId);
+}
+
+function imageUrlForCard(card) {
+  return card.imageUrl || card.imagePath || card.imageFile || card.image || "";
+}
+
+function imageAltForCard(card, post) {
+  return card.imageAlt || card.altText || card.headline || post.title || "card news image";
+}
+
 function commentsForPost(postId) {
   return state.comments.filter((comment) => comment.postId === postId);
 }
@@ -372,8 +389,10 @@ function renderApp() {
 function renderPostTile(post) {
   const likes = activeLikesForPost(post.postId).length;
   const comments = commentsForPost(post.postId).length;
+  const thumbnailImage = imageUrlForPost(post);
   return `
-    <button class="post-tile" type="button" data-open-post="${post.postId}" style="--cover:${post.coverColor}">
+    <button class="post-tile ${thumbnailImage ? "has-image" : ""}" type="button" data-open-post="${post.postId}" style="--cover:${post.coverColor}">
+      ${thumbnailImage ? `<img class="tile-image" src="${escapeHtml(thumbnailImage)}" alt="" loading="lazy" />` : ""}
       <div class="tile-content">
         <div class="tile-label">${escapeHtml(post.thumbnailLabel)}</div>
         <div class="tile-meta">
@@ -397,15 +416,26 @@ function renderDetail() {
   const dots = slides.map((_, index) => `<span class="dot ${index === slideIndex ? "active" : ""}"></span>`).join("");
   const isLiking = pendingAction === "like";
   const isCommenting = pendingAction === "comment";
+  const activeImage = imageUrlForCard(activeSlide);
+  const slideBody = activeImage
+    ? `
+            <div class="image-card">
+              <img class="card-image" data-card-image src="${escapeHtml(activeImage)}" alt="${escapeHtml(imageAltForCard(activeSlide, post))}" />
+              <div class="image-fallback" hidden>이미지를 찾을 수 없습니다. Cards 탭의 imageUrl 경로를 확인해 주세요.</div>
+            </div>
+      `
+    : `
+            <h3>${escapeHtml(activeSlide.headline)}</h3>
+            <p>${escapeHtml(activeSlide.body)}</p>
+      `;
 
   return `
     <section class="detail-overlay" role="dialog" aria-modal="true">
       <article class="detail-panel">
         <div class="carousel-stage">
-          <div class="card-slide" style="--slide:${activeSlide.accentColor}">
+          <div class="card-slide ${activeImage ? "image-slide" : ""}" style="--slide:${activeSlide.accentColor}">
             <span class="slide-index">${slideIndex + 1} / ${slides.length}</span>
-            <h3>${escapeHtml(activeSlide.headline)}</h3>
-            <p>${escapeHtml(activeSlide.body)}</p>
+            ${slideBody}
           </div>
           <div class="carousel-controls">
             <button class="pager-btn" id="prevSlide" type="button" aria-label="이전 카드" ${slideIndex === 0 ? "disabled" : ""}>${iconChevron("left")}</button>
@@ -470,6 +500,15 @@ function bindDetailEvents() {
   const heart = document.querySelector("#heartButton");
   const form = document.querySelector("#commentForm");
   const overlay = document.querySelector(".detail-overlay");
+
+  document.querySelectorAll("[data-card-image]").forEach((image) => {
+    image.addEventListener("error", () => {
+      image.hidden = true;
+      if (image.nextElementSibling) {
+        image.nextElementSibling.hidden = false;
+      }
+    });
+  });
 
   close?.addEventListener("click", closeDetail);
   previous?.addEventListener("click", () => moveSlide(-1));
