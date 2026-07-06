@@ -1097,13 +1097,17 @@ textarea:disabled {
 }
 
 .detail-overlay {
-  padding: clamp(8px, 2vh, 18px);
+  padding: clamp(14px, 3vh, 24px);
   background: rgba(0, 0, 0, 0.72);
 }
 
 .detail-panel {
-  width: min(100%, 1120px);
-  grid-template-columns: minmax(0, 1.7fr) minmax(340px, 0.95fr);
+  width: min(100%, 980px);
+  height: min(760px, calc(100vh - 48px));
+  height: min(760px, calc(100dvh - 48px));
+  max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 48px);
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.85fr);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 4px;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
@@ -1120,7 +1124,7 @@ textarea:disabled {
 }
 
 .card-image {
-  max-width: min(100%, 590px);
+  max-width: min(100%, 500px);
   border-radius: 0;
   background: #000;
   box-shadow: none;
@@ -1298,12 +1302,17 @@ textarea:disabled {
   }
 
   .detail-panel {
+    width: min(92vw, 680px);
+    height: min(720px, calc(100vh - 32px));
+    height: min(720px, calc(100dvh - 32px));
+    max-height: calc(100vh - 32px);
+    max-height: calc(100dvh - 32px);
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(280px, 52%) minmax(0, 1fr);
+    grid-template-rows: minmax(230px, 46%) minmax(0, 1fr);
   }
 
   .card-image {
-    max-width: min(100%, 520px);
+    max-width: min(100%, 430px);
     max-height: 100%;
   }
 }
@@ -1356,17 +1365,17 @@ textarea:disabled {
   }
 
   .detail-overlay {
-    padding: 0;
+    padding: 8px;
   }
 
   .detail-panel {
-    height: 100vh;
-    height: 100dvh;
-    max-height: 100vh;
-    max-height: 100dvh;
-    border: 0;
-    border-radius: 0;
-    grid-template-rows: minmax(260px, 50%) minmax(0, 1fr);
+    width: 100%;
+    height: calc(100vh - 16px);
+    height: calc(100dvh - 16px);
+    max-height: calc(100vh - 16px);
+    max-height: calc(100dvh - 16px);
+    border-radius: 4px;
+    grid-template-rows: minmax(230px, 44%) minmax(0, 1fr);
   }
 
   #prevSlide {
