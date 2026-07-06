@@ -67,6 +67,8 @@ This project does not need a GitHub Actions workflow because it is a plain stati
 
 Put image files in the repository's `cards/` folder.
 
+Recommended card news image ratio: `4:5`, for example `1080 x 1350`.
+
 Example:
 
 ```text
@@ -81,7 +83,13 @@ In the Google Sheet `Cards` tab, fill the `imageUrl` column with the same relati
 cards/p001-01.png
 ```
 
-The app uses image slides when `imageUrl` is filled. If `imageUrl` is blank, it falls back to the text card fields: `headline`, `body`, and `accentColor`.
+The `Cards` tab should use only these columns:
+
+```text
+cardId, postId, slideOrder, imageUrl, imageAlt
+```
+
+The app only uses image slides. Every row in the `Cards` tab must have an `imageUrl`. Posts without a usable image path are not shown in the explore grid. If an image path is wrong, the detail view shows an image-missing message.
 
 ## 6. Test
 

@@ -22,25 +22,16 @@ const seedData = {
     { postId: "p006", title: "수학 풀이 공유 방법", category: "수학", authorName: "김하늘 선생님", thumbnailLabel: "수학", coverColor: "#06B6D4", createdAt: "2026-07-06T09:20:00+09:00", visibility: "class", sortOrder: 6 },
   ],
   cards: [
-    { cardId: "c001", postId: "p001", slideOrder: 1, headline: "등교하면 먼저 인사하기", body: "교실에 들어오면 선생님과 친구에게 밝게 인사해요.", accentColor: "#F97316", imageUrl: "cards/p001-01.png", imageAlt: "Morning Check test card news image" },
-    { cardId: "c002", postId: "p001", slideOrder: 2, headline: "준비물은 책상 오른쪽", body: "필통, 알림장, 오늘 쓸 책을 꺼내고 가방은 정리해요.", accentColor: "#FDBA74", imageUrl: "cards/p001-02.png", imageAlt: "Desk Ready test card news image" },
-    { cardId: "c003", postId: "p001", slideOrder: 3, headline: "아침 질문에 답하기", body: "칠판의 오늘 질문을 읽고 짧게 생각을 적어 봐요.", accentColor: "#FB923C", imageUrl: "cards/p001-03.png", imageAlt: "Question Time test card news image" },
-    { cardId: "c004", postId: "p002", slideOrder: 1, headline: "보안경과 장갑 확인", body: "실험 전 보호 장비를 먼저 착용하고 친구 장비도 확인해요.", accentColor: "#14B8A6", imageUrl: "cards/p002-01.png", imageAlt: "Safety First test card news image" },
-    { cardId: "c005", postId: "p002", slideOrder: 2, headline: "냄새는 손으로 부채질", body: "용액 냄새를 직접 맡지 않고 손으로 살짝 부채질해요.", accentColor: "#5EEAD4", imageUrl: "cards/p002-02.png", imageAlt: "Observe test card news image" },
-    { cardId: "c006", postId: "p002", slideOrder: 3, headline: "결과는 바로 기록", body: "관찰한 사실과 생각을 나누어 적으면 발표가 쉬워져요.", accentColor: "#2DD4BF", imageUrl: "cards/p002-03.png", imageAlt: "Record test card news image" },
-    { cardId: "c007", postId: "p003", slideOrder: 1, headline: "칭찬 한 가지 먼저", body: "친구 글에서 좋았던 점을 구체적으로 찾아 댓글을 시작해요.", accentColor: "#6366F1" },
-    { cardId: "c008", postId: "p003", slideOrder: 2, headline: "고칠 점은 부드럽게", body: "명령보다 제안으로 말하면 친구가 편하게 받아들일 수 있어요.", accentColor: "#A5B4FC" },
-    { cardId: "c009", postId: "p003", slideOrder: 3, headline: "개인정보는 쓰지 않기", body: "전화번호, 주소, 사적인 이야기는 댓글에 남기지 않아요.", accentColor: "#818CF8" },
-    { cardId: "c010", postId: "p004", slideOrder: 1, headline: "10분 읽기 인증", body: "오늘 읽은 페이지와 기억나는 문장을 한 줄로 남겨요.", accentColor: "#EC4899" },
-    { cardId: "c011", postId: "p004", slideOrder: 2, headline: "질문 하나 만들기", body: "주인공에게 묻고 싶은 질문을 적으면 깊이 읽게 돼요.", accentColor: "#F9A8D4" },
-    { cardId: "c012", postId: "p004", slideOrder: 3, headline: "친구 추천 둘러보기", body: "친구가 추천한 책을 보고 다음 책 후보를 골라 봐요.", accentColor: "#F472B6" },
-    { cardId: "c013", postId: "p005", slideOrder: 1, headline: "기록이는 근거를 남겨요", body: "모둠 의견과 결정 이유를 짧고 정확하게 적어요.", accentColor: "#84CC16" },
-    { cardId: "c014", postId: "p005", slideOrder: 2, headline: "발표이는 모두의 목소리", body: "한 사람의 의견만이 아니라 모둠 전체 생각을 전해요.", accentColor: "#BEF264" },
-    { cardId: "c015", postId: "p005", slideOrder: 3, headline: "시간이는 흐름을 지켜요", body: "남은 시간을 알려 주고 마무리할 때를 챙겨요.", accentColor: "#A3E635" },
-    { cardId: "c016", postId: "p006", slideOrder: 1, headline: "풀이 과정 먼저", body: "답만 쓰기보다 어떤 생각으로 풀었는지 순서를 보여줘요.", accentColor: "#06B6D4" },
-    { cardId: "c017", postId: "p006", slideOrder: 2, headline: "다른 방법도 환영", body: "친구 풀이와 다른 길을 찾았다면 비교해 보는 것도 좋아요.", accentColor: "#67E8F9" },
-    { cardId: "c018", postId: "p006", slideOrder: 3, headline: "질문은 구체적으로", body: "어디까지 이해했고 어디서 막혔는지 알려 주면 도움받기 쉬워요.", accentColor: "#22D3EE" },
+    {"cardId":"c001","postId":"p001","slideOrder":1,"imageUrl":"cards/p001-01.png","imageAlt":"Morning Check test card news image"},
+    {"cardId":"c002","postId":"p001","slideOrder":2,"imageUrl":"cards/p001-02.png","imageAlt":"Desk Ready test card news image"},
+    {"cardId":"c003","postId":"p001","slideOrder":3,"imageUrl":"cards/p001-03.png","imageAlt":"Question Time test card news image"},
+    {"cardId":"c004","postId":"p001","slideOrder":4,"imageUrl":"cards/p001-04.png","imageAlt":"Fourth test card news image"},
+    {"cardId":"c005","postId":"p001","slideOrder":5,"imageUrl":"cards/p001-05.png","imageAlt":"Fifth test card news image"},
+    {"cardId":"c006","postId":"p002","slideOrder":1,"imageUrl":"cards/p002-01.png","imageAlt":"Safety First test card news image"},
+    {"cardId":"c007","postId":"p002","slideOrder":2,"imageUrl":"cards/p002-02.png","imageAlt":"Observe test card news image"},
+    {"cardId":"c008","postId":"p002","slideOrder":3,"imageUrl":"cards/p002-03.png","imageAlt":"Record test card news image"},
   ],
+
   likes: [
     { likeId: "l001", postId: "p001", userId: "s001", likedAt: "2026-07-06T09:10:00+09:00", status: "active", cancelledAt: "" },
     { likeId: "l002", postId: "p001", userId: "s002", likedAt: "2026-07-06T09:12:00+09:00", status: "active", cancelledAt: "" },
@@ -233,11 +224,12 @@ function imageUrlForPost(post) {
 }
 
 function imageUrlForCard(card) {
+  if (!card) return "";
   return card.imageUrl || card.imagePath || card.imageFile || card.image || "";
 }
 
 function imageAltForCard(card, post) {
-  return card.imageAlt || card.altText || card.headline || post.title || "card news image";
+  return card.imageAlt || card.altText || post.title || "card news image";
 }
 
 function commentsForPost(postId) {
@@ -361,7 +353,9 @@ async function login(name, code) {
 }
 
 function renderApp() {
-  const posts = [...state.posts].sort((a, b) => a.sortOrder - b.sortOrder);
+  const posts = [...state.posts]
+    .filter((post) => imageUrlForPost(post))
+    .sort((a, b) => a.sortOrder - b.sortOrder);
   app.innerHTML = `
     <div class="app-shell">
       <header class="topbar">
@@ -432,39 +426,37 @@ function renderPostTile(post) {
 function renderDetail() {
   const post = state.posts.find((item) => item.postId === selectedPostId);
   if (!post) return "";
-  const slides = cardsForPost(post.postId);
-  const activeSlide = slides[slideIndex] || slides[0];
+  const slides = cardsForPost(post.postId).filter((card) => imageUrlForCard(card));
+  const slideCount = Math.max(slides.length, 1);
+  const activeSlide = slides[slideIndex] || { cardId: "missing-image", postId: post.postId, slideOrder: 1 };
   const liked = isLikedByCurrentUser(post.postId);
   const likesCount = activeLikesForPost(post.postId).length;
   const comments = commentsForPost(post.postId);
-  const dots = slides.map((_, index) => `<span class="dot ${index === slideIndex ? "active" : ""}"></span>`).join("");
+  const dots = Array.from({ length: slideCount }, (_, index) => `<span class="dot ${index === slideIndex ? "active" : ""}"></span>`).join("");
   const isLiking = pendingAction === "like";
   const isCommenting = pendingAction === "comment";
   const activeImage = imageUrlForCard(activeSlide);
-  const slideBody = activeImage
-    ? `
+  const slideBody = `
             <div class="image-card">
-              <img class="card-image" data-card-image src="${escapeHtml(activeImage)}" alt="${escapeHtml(imageAltForCard(activeSlide, post))}" />
-              <div class="image-fallback" hidden>이미지를 찾을 수 없습니다. Cards 탭의 imageUrl 경로를 확인해 주세요.</div>
+              ${activeImage
+                ? `<img class="card-image" data-card-image src="${escapeHtml(activeImage)}" alt="${escapeHtml(imageAltForCard(activeSlide, post))}" />`
+                : ""}
+              <div class="image-fallback" ${activeImage ? "hidden" : ""}>이미지를 찾을 수 없습니다. Cards 탭의 imageUrl 경로를 확인해 주세요.</div>
             </div>
-      `
-    : `
-            <h3>${escapeHtml(activeSlide.headline)}</h3>
-            <p>${escapeHtml(activeSlide.body)}</p>
       `;
 
   return `
     <section class="detail-overlay" role="dialog" aria-modal="true">
       <article class="detail-panel">
         <div class="carousel-stage">
-          <div class="card-slide ${activeImage ? "image-slide" : ""}" style="--slide:${activeSlide.accentColor}">
-            <span class="slide-index">${slideIndex + 1} / ${slides.length}</span>
+          <div class="card-slide image-slide">
+            <span class="slide-index">${Math.min(slideIndex + 1, slideCount)} / ${slideCount}</span>
             ${slideBody}
           </div>
           <div class="carousel-controls">
             <button class="pager-btn" id="prevSlide" type="button" aria-label="이전 카드" ${slideIndex === 0 ? "disabled" : ""}>${iconChevron("left")}</button>
             <div class="dots" aria-hidden="true">${dots}</div>
-            <button class="pager-btn" id="nextSlide" type="button" aria-label="다음 카드" ${slideIndex >= slides.length - 1 ? "disabled" : ""}>${iconChevron("right")}</button>
+            <button class="pager-btn" id="nextSlide" type="button" aria-label="다음 카드" ${slideIndex >= slideCount - 1 ? "disabled" : ""}>${iconChevron("right")}</button>
           </div>
         </div>
         <aside class="detail-side">
@@ -552,7 +544,8 @@ function closeDetail() {
 
 function moveSlide(delta) {
   const slides = cardsForPost(selectedPostId);
-  slideIndex = Math.max(0, Math.min(slides.length - 1, slideIndex + delta));
+  const slideCount = Math.max(slides.length, 1);
+  slideIndex = Math.max(0, Math.min(slideCount - 1, slideIndex + delta));
   renderApp();
 }
 

@@ -21,3 +21,5 @@ The prototype stores local interaction state in `localStorage`. To connect live 
 For GitHub Pages deployment, follow `GITHUB_DEPLOY.md`.
 
 Student-made card news images should go in the `cards/` folder. Put the same relative path, such as `cards/p001-01.png`, in the Google Sheet `Cards.imageUrl` column.
+
+The app is image-only: `Cards` uses `cardId`, `postId`, `slideOrder`, `imageUrl`, and `imageAlt`. Posts without a usable image path are not shown in the explore grid.
