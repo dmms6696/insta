@@ -571,26 +571,6 @@ textarea:disabled {
   text-align: center;
 }
 
-.card-slide h3 {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  max-width: 520px;
-  font-size: clamp(30px, 5vw, 52px);
-  line-height: 1.08;
-  letter-spacing: 0;
-}
-
-.card-slide p {
-  position: relative;
-  z-index: 1;
-  max-width: 540px;
-  margin: 20px 0 0;
-  color: rgba(255, 255, 255, 0.88);
-  font-size: clamp(16px, 2vw, 20px);
-  line-height: 1.7;
-}
-
 .carousel-controls {
   height: 64px;
   display: flex;
