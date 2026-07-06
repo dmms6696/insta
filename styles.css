@@ -554,6 +554,13 @@ textarea:disabled {
   place-items: center;
   padding: 18px;
   overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.image-card.is-dragging {
+  cursor: grabbing;
 }
 
 .card-image {
@@ -566,6 +573,13 @@ textarea:disabled {
   border-radius: 8px;
   background: #fff;
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+  transform: translateX(var(--drag-offset, 0));
+  transition: transform 0.18s ease;
+  -webkit-user-drag: none;
+}
+
+.image-card.is-dragging .card-image {
+  transition: none;
 }
 
 .image-fallback {

@@ -60,6 +60,7 @@ let selectedPostId = null;
 let slideIndex = 0;
 let remoteHydrated = false;
 let pendingAction = null;
+let swipeState = null;
 
 const app = document.querySelector("#app");
 
@@ -437,9 +438,9 @@ function renderDetail() {
   const isCommenting = pendingAction === "comment";
   const activeImage = imageUrlForCard(activeSlide);
   const slideBody = `
-            <div class="image-card">
+            <div class="image-card" data-swipe-area>
               ${activeImage
-                ? `<img class="card-image" data-card-image src="${escapeHtml(activeImage)}" alt="${escapeHtml(imageAltForCard(activeSlide, post))}" />`
+                ? `<img class="card-image" data-card-image src="${escapeHtml(activeImage)}" alt="${escapeHtml(imageAltForCard(activeSlide, post))}" draggable="false" />`
                 : ""}
               <div class="image-fallback" ${activeImage ? "hidden" : ""}>이미지를 찾을 수 없습니다. Cards 탭의 imageUrl 경로를 확인해 주세요.</div>
             </div>
@@ -516,6 +517,7 @@ function bindDetailEvents() {
   const heart = document.querySelector("#heartButton");
   const form = document.querySelector("#commentForm");
   const overlay = document.querySelector(".detail-overlay");
+  const swipeArea = document.querySelector("[data-swipe-area]");
 
   document.querySelectorAll("[data-card-image]").forEach((image) => {
     image.addEventListener("error", () => {
@@ -529,6 +531,11 @@ function bindDetailEvents() {
   close?.addEventListener("click", closeDetail);
   previous?.addEventListener("click", () => moveSlide(-1));
   next?.addEventListener("click", () => moveSlide(1));
+  swipeArea?.addEventListener("pointerdown", startSwipe);
+  swipeArea?.addEventListener("pointermove", updateSwipe);
+  swipeArea?.addEventListener("pointerup", endSwipe);
+  swipeArea?.addEventListener("pointercancel", cancelSwipe);
+  swipeArea?.addEventListener("lostpointercapture", cancelSwipe);
   heart?.addEventListener("click", toggleLike);
   form?.addEventListener("submit", addComment);
   overlay?.addEventListener("click", (event) => {
@@ -543,10 +550,64 @@ function closeDetail() {
 }
 
 function moveSlide(delta) {
-  const slides = cardsForPost(selectedPostId);
+  const slides = cardsForPost(selectedPostId).filter((card) => imageUrlForCard(card));
   const slideCount = Math.max(slides.length, 1);
   slideIndex = Math.max(0, Math.min(slideCount - 1, slideIndex + delta));
   renderApp();
+}
+
+function startSwipe(event) {
+  if (pendingAction || event.button > 0) return;
+  const slideCount = Math.max(cardsForPost(selectedPostId).filter((card) => imageUrlForCard(card)).length, 1);
+  if (slideCount < 2) return;
+
+  swipeState = {
+    pointerId: event.pointerId,
+    startX: event.clientX,
+    startY: event.clientY,
+    deltaX: 0,
+    active: false,
+  };
+  event.currentTarget.setPointerCapture?.(event.pointerId);
+}
+
+function updateSwipe(event) {
+  if (!swipeState || swipeState.pointerId !== event.pointerId) return;
+  const deltaX = event.clientX - swipeState.startX;
+  const deltaY = event.clientY - swipeState.startY;
+
+  if (!swipeState.active && Math.abs(deltaX) > 10 && Math.abs(deltaX) > Math.abs(deltaY) * 1.25) {
+    swipeState.active = true;
+    event.currentTarget.classList.add("is-dragging");
+  }
+
+  if (!swipeState.active) return;
+  event.preventDefault();
+  swipeState.deltaX = deltaX;
+  const limitedDelta = Math.max(-90, Math.min(90, deltaX));
+  event.currentTarget.style.setProperty("--drag-offset", `${limitedDelta}px`);
+}
+
+function endSwipe(event) {
+  if (!swipeState || swipeState.pointerId !== event.pointerId) return;
+  const area = event.currentTarget;
+  const threshold = Math.max(48, area.clientWidth * 0.16);
+  const deltaX = swipeState.deltaX;
+  resetSwipe(area);
+
+  if (Math.abs(deltaX) < threshold) return;
+  moveSlide(deltaX < 0 ? 1 : -1);
+}
+
+function cancelSwipe(event) {
+  if (!swipeState || swipeState.pointerId !== event.pointerId) return;
+  resetSwipe(event.currentTarget);
+}
+
+function resetSwipe(area) {
+  area.classList.remove("is-dragging");
+  area.style.removeProperty("--drag-offset");
+  swipeState = null;
 }
 
 async function toggleLike() {
