@@ -68,6 +68,7 @@ let remoteSession = null;
 let selectedPostId = null;
 let slideIndex = 0;
 let remoteHydrated = false;
+let pendingAction = null;
 
 const app = document.querySelector("#app");
 
@@ -328,7 +329,7 @@ function renderApp() {
             <span class="avatar-dot" style="--dot:${currentUser.avatarColor}"></span>
             ${currentUser.role === "teacher" ? "교사" : "학생"}
           </span>
-          <button class="ghost-btn" id="logoutButton" type="button">로그아웃</button>
+          <button class="ghost-btn" id="logoutButton" type="button" ${pendingAction ? "disabled" : ""}>로그아웃</button>
         </div>
       </header>
       <main class="main-area">
@@ -394,6 +395,8 @@ function renderDetail() {
   const likesCount = activeLikesForPost(post.postId).length;
   const comments = commentsForPost(post.postId);
   const dots = slides.map((_, index) => `<span class="dot ${index === slideIndex ? "active" : ""}"></span>`).join("");
+  const isLiking = pendingAction === "like";
+  const isCommenting = pendingAction === "comment";
 
   return `
     <section class="detail-overlay" role="dialog" aria-modal="true">
@@ -419,8 +422,8 @@ function renderDetail() {
             <button class="icon-btn close-btn" id="closeDetail" type="button" aria-label="닫기">${iconClose()}</button>
           </header>
           <div class="reaction-row">
-            <button class="heart-btn ${liked ? "active" : ""}" id="heartButton" type="button" aria-label="좋아요">
-              ${iconHeart(liked)}
+            <button class="heart-btn ${liked ? "active" : ""} ${isLiking ? "loading" : ""}" id="heartButton" type="button" aria-label="좋아요" aria-busy="${isLiking}" ${isLiking || isCommenting ? "disabled" : ""}>
+              ${isLiking ? `<span class="loading-spinner" aria-hidden="true"></span>` : iconHeart(liked)}
             </button>
             <div class="reaction-counts">
               <strong>${likesCount}명이 좋아합니다</strong>
@@ -433,9 +436,12 @@ function renderDetail() {
           <form class="comment-form" id="commentForm">
             <label class="field">
               <span>댓글</span>
-              <textarea name="commentText" maxlength="240" placeholder="생각을 남겨 주세요."></textarea>
+              <textarea name="commentText" maxlength="240" placeholder="생각을 남겨 주세요." ${isCommenting || isLiking ? "disabled" : ""}></textarea>
             </label>
-            <button class="primary-btn" type="submit">댓글 남기기</button>
+            <button class="primary-btn" type="submit" aria-busy="${isCommenting}" ${isCommenting || isLiking ? "disabled" : ""}>
+              ${isCommenting ? `<span class="loading-spinner light" aria-hidden="true"></span> 반영 중...` : "댓글 남기기"}
+            </button>
+            ${pendingAction ? `<p class="action-status" role="status">활동을 반영하는 중입니다...</p>` : ""}
           </form>
         </aside>
       </article>
@@ -488,6 +494,10 @@ function moveSlide(delta) {
 }
 
 async function toggleLike() {
+  if (pendingAction) return;
+  pendingAction = "like";
+  renderApp();
+
   const existing = likeForCurrentUser(selectedPostId);
   const timestamp = nowIso();
   let payload;
@@ -512,15 +522,24 @@ async function toggleLike() {
     state.likes.push(payload);
   }
   saveState();
-  await sendSheetEvent("likeChanged", payload);
-  renderApp();
+  try {
+    await sendSheetEvent("likeChanged", payload);
+  } finally {
+    pendingAction = null;
+    renderApp();
+  }
 }
 
 async function addComment(event) {
   event.preventDefault();
+  if (pendingAction) return;
   const form = new FormData(event.currentTarget);
   const text = String(form.get("commentText") || "").trim();
   if (!text) return;
+
+  pendingAction = "comment";
+  renderApp();
+
   const comment = {
     commentId: `cm${String(Date.now()).slice(-8)}`,
     postId: selectedPostId,
@@ -530,8 +549,12 @@ async function addComment(event) {
   };
   state.comments.push(comment);
   saveState();
-  await sendSheetEvent("commentAdded", comment);
-  renderApp();
+  try {
+    await sendSheetEvent("commentAdded", comment);
+  } finally {
+    pendingAction = null;
+    renderApp();
+  }
 }
 
 function renderTeacherPanel() {

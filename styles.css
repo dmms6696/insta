@@ -199,6 +199,34 @@ button {
   text-decoration: none;
 }
 
+button:disabled,
+textarea:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+.loading-spinner.light {
+  margin-right: 8px;
+  border-color: rgba(255, 255, 255, 0.94);
+  border-right-color: transparent;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .login-error {
   min-height: 20px;
   margin: 0;
@@ -624,6 +652,12 @@ button {
   background: var(--danger);
 }
 
+.heart-btn.loading {
+  color: #fff;
+  border-color: var(--danger);
+  background: var(--danger);
+}
+
 .heart-btn svg {
   width: 24px;
   height: 24px;
@@ -694,6 +728,12 @@ button {
 .comment-form textarea {
   min-height: 78px;
   resize: vertical;
+}
+
+.action-status {
+  margin: -2px 0 0;
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .teacher-panel {
