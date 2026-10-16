@@ -31,12 +31,6 @@ function doPost(event) {
     return jsonResponse({ ok: true, data: buildClientData_(user) });
   }
 
-  if (body.type === "commentDeleted") {
-    var deleted = deleteComment_(body.payload || {}, user);
-    if (!deleted) return jsonResponse({ ok: false, error: "COMMENT_NOT_OWNED" });
-    return jsonResponse({ ok: true, data: buildClientData_(user) });
-  }
-
   return jsonResponse({ ok: false, error: "UNKNOWN_EVENT" });
 }
 
@@ -211,33 +205,6 @@ function appendComment_(comment, user) {
     comment.commentText,
     toDateOrBlank_(comment.createdAt)
   ]);
-}
-
-function deleteComment_(payload, user) {
-  var lock = LockService.getScriptLock();
-  lock.waitLock(10000);
-  try {
-    var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Comments");
-    var rows = sheet.getDataRange().getValues();
-    var headers = rows[0];
-    var idColumn = headers.indexOf("commentId");
-    var userColumn = headers.indexOf("userId");
-    var statusColumn = headers.indexOf("status");
-    if (idColumn < 0 || userColumn < 0 || !payload.commentId) return false;
-    for (var i = 1; i < rows.length; i += 1) {
-      if (String(rows[i][idColumn]) !== String(payload.commentId)) continue;
-      if (String(rows[i][userColumn]) !== String(user.userId)) return false;
-      if (statusColumn < 0) {
-        statusColumn = headers.length;
-        sheet.getRange(1, statusColumn + 1).setValue("status");
-      }
-      sheet.getRange(i + 1, statusColumn + 1).setValue("deleted");
-      return true;
-    }
-    return false;
-  } finally {
-    lock.releaseLock();
-  }
 }
 
 function rowsToObjects_(sheetName) {
