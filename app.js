@@ -272,8 +272,8 @@ function renderLogin() {
         <div class="login-art">
           <div class="brand-mark">D</div>
           <div>
-            <h1>DMSTAGRAM</h1>
-            <p>동명스타그램</p>
+            <h1>DM BOOKSTAGRAM</h1>
+            <p>동명북스타그램</p>
           </div>
         </div>
         <form class="login-form" id="loginForm">
@@ -363,7 +363,7 @@ function renderApp() {
         <div class="topbar-title">
           <div class="search-icon">${iconSearch()}</div>
           <div>
-            <h1>DMSTAGRAM</h1>
+            <h1>DM BOOKSTAGRAM</h1>
             <p>탐색 · ${escapeHtml(currentUser.className)} · ${escapeHtml(currentUser.displayName)}</p>
           </div>
         </div>
