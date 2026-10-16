@@ -2,12 +2,29 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>동명북스타그램 · DM BOOKSTAGRAM</title>
-    <link rel="stylesheet" href="./styles.css?v=20261016-author" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="동명 도서관" />
+    <link rel="manifest" href="kiosk-preview/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="kiosk-preview/icon-192.png" />
+    <title>동명 도서관 · 동명북스타그램</title>
+    <link rel="stylesheet" href="kiosk-preview/shell.css" />
   </head>
   <body>
-    <div id="app"></div>
-    <script src="./app.js?v=20261016-student-number"></script>
+    <main class="screens">
+      <section id="library-panel" class="screen" role="tabpanel" aria-labelledby="library-tab">
+        <iframe id="library" title="도서관 검색" src="kiosk-preview/library.html" sandbox="allow-scripts allow-same-origin allow-forms allow-modals"></iframe>
+      </section>
+      <section id="posts-panel" class="screen" role="tabpanel" aria-labelledby="posts-tab" hidden>
+        <iframe id="posts" title="동명북스타그램" src="kiosk-preview/bookstagram.html" sandbox="allow-scripts allow-same-origin allow-forms allow-modals"></iframe>
+      </section>
+    </main>
+    <p id="connection" role="status" hidden>인터넷 연결이 끊겼습니다. 검색과 활동 저장에는 연결이 필요합니다.</p>
+    <nav class="bottom-tabs" role="tablist" aria-label="도서관 메뉴">
+      <button id="library-tab" role="tab" aria-controls="library-panel" aria-selected="true" data-screen="library">도서관 검색</button>
+      <button id="posts-tab" role="tab" aria-controls="posts-panel" aria-selected="false" data-screen="posts">동명북스타그램</button>
+    </nav>
+    <script src="kiosk-preview/shell.js"></script>
   </body>
 </html>
