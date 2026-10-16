@@ -356,7 +356,10 @@ async function login(name, code) {
 function renderApp() {
   const posts = [...state.posts]
     .filter((post) => imageUrlForPost(post))
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    .sort((a, b) => {
+      const newestFirst = (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0);
+      return newestFirst || (Number(b.sortOrder) || 0) - (Number(a.sortOrder) || 0);
+    });
   app.innerHTML = `
     <div class="app-shell">
       <header class="topbar">
