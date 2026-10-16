@@ -5,6 +5,8 @@
 .login-panel { max-height: calc(100dvh - 48px); overflow: auto; }
 .detail-overlay { padding: 12px; }
 .detail-panel { width: min(1120px, 100%); height: calc(100dvh - 24px); max-height: calc(100dvh - 24px); }
+.image-card { position: absolute; inset: 0; width: 100%; height: 100%; }
+.card-image { width: 100%; height: 100%; aspect-ratio: auto; object-fit: contain; }
 .teacher-panel { display: none; }
 a[target="_blank"] { display: none; }
 @media (orientation: landscape) and (min-width: 800px) {
