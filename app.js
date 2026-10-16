@@ -282,10 +282,10 @@ function renderLogin() {
           </div>
           <label class="field">
             <span>이름</span>
-            <input name="displayName" autocomplete="username" placeholder="예: 민서" />
+            <input name="displayName" autocomplete="username" placeholder="예: 김동명" />
           </label>
           <label class="field">
-            <span>코드</span>
+            <span>학번</span>
             <input name="loginCode" autocomplete="current-password" placeholder="예: 1111" />
           </label>
           <button class="primary-btn" type="submit">들어가기</button>
@@ -331,7 +331,7 @@ async function login(name, code) {
       loginCode: cleanedCode,
     });
     if (!result?.ok) {
-      error.textContent = "이름과 코드를 다시 확인해 주세요.";
+      error.textContent = "이름과 학번을 다시 확인해 주세요.";
       return;
     }
     remoteSession = { token: result.token };
@@ -346,7 +346,7 @@ async function login(name, code) {
 
   const user = state.users.find((item) => item.displayName === cleanedName && item.loginCode === cleanedCode);
   if (!user) {
-    document.querySelector("#loginError").textContent = "이름과 코드를 다시 확인해 주세요.";
+    document.querySelector("#loginError").textContent = "이름과 학번을 다시 확인해 주세요.";
     return;
   }
   currentUser = user;
