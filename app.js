@@ -463,8 +463,9 @@ function renderDetail() {
         <aside class="detail-side">
           <header class="detail-header">
             <div>
+              <strong class="post-author">${escapeHtml(post.authorName || "작성자 미상")}</strong>
               <h2>${escapeHtml(post.title)}</h2>
-              <p>${escapeHtml(post.category)} · ${formatDate(post.createdAt)}</p>
+              <p>${post.category ? `${escapeHtml(post.category)} · ` : ""}${formatDate(post.createdAt)}</p>
             </div>
             <button class="icon-btn close-btn" id="closeDetail" type="button" aria-label="닫기">${iconClose()}</button>
           </header>
