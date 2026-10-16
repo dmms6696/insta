@@ -42,4 +42,4 @@ window.addEventListener('online', connection);
 window.addEventListener('offline', connection);
 connection();
 selectScreen('library');
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(console.warn);
+if ('serviceWorker' in navigator) navigator.serviceWorker.register(new URL('./sw.js', document.currentScript.src)).catch(console.warn);
