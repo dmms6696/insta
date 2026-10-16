@@ -654,6 +654,11 @@ async function addComment(event) {
   const text = String(form.get("commentText") || "").trim();
   if (!text) return;
 
+  const confirmed = window.confirm(
+    `댓글을 등록할까요?\n\n현재 ${currentUser.displayName} 계정으로 댓글을 남깁니다.\n본인의 계정인지 확인해 주세요.\n\n욕설, 비방, 개인정보 등 다른 사람에게 피해를 주는 내용은 남기지 마세요. 댓글과 작성 계정은 선생님이 확인할 수 있습니다.\n\nCCTV가 당신을 보고 있습니다.\n\n서로 존중하는 댓글을 작성했나요?`
+  );
+  if (!confirmed) return;
+
   pendingAction = "comment";
   renderApp();
 
