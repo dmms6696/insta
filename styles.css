@@ -944,6 +944,14 @@ textarea:disabled {
   }
 }
 
+.post-author {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
 /* Instagram-style visual polish */
 .login-screen {
   background: #fafafa;
