@@ -504,7 +504,6 @@ function renderComment(comment) {
       <div class="comment-body">
         <strong>${escapeHtml(user.displayName)} · ${formatDate(comment.createdAt)}</strong>
         <p>${escapeHtml(comment.commentText)}</p>
-        ${comment.userId === currentUser.userId ? `<button type="button" class="ghost-btn" data-delete-comment="${escapeHtml(comment.commentId)}" ${pendingAction ? "disabled" : ""}>${pendingAction === "deleteComment" ? "삭제 중..." : "삭제"}</button>` : ""}
       </div>
     </article>
   `;
@@ -539,9 +538,6 @@ function bindDetailEvents() {
   swipeArea?.addEventListener("lostpointercapture", cancelSwipe);
   heart?.addEventListener("click", toggleLike);
   form?.addEventListener("submit", addComment);
-  document.querySelectorAll("[data-delete-comment]").forEach((button) => {
-    button.addEventListener("click", () => deleteComment(button.dataset.deleteComment));
-  });
   overlay?.addEventListener("click", (event) => {
     if (event.target === overlay) closeDetail();
   });
@@ -648,33 +644,6 @@ async function toggleLike() {
   } finally {
     pendingAction = null;
     renderApp();
-  }
-}
-
-async function deleteComment(commentId) {
-  if (pendingAction) return;
-  const comment = state.comments.find((item) => item.commentId === commentId);
-  if (!comment || comment.userId !== currentUser.userId) return;
-  if (!window.confirm("이 댓글을 삭제할까요?")) return;
-  const draft = document.querySelector('#commentForm textarea')?.value || "";
-  pendingAction = "deleteComment";
-  renderApp();
-  try {
-    if (SHEET_CONFIG.appsScriptUrl) {
-      const result = await sendSheetEvent("commentDeleted", { commentId });
-      if (!result?.ok) {
-        window.alert("댓글을 삭제하지 못했습니다. 로그인 상태를 확인하고 다시 시도해 주세요.");
-        return;
-      }
-    } else {
-      state.comments = state.comments.filter((item) => item.commentId !== commentId);
-      saveState();
-    }
-  } finally {
-    pendingAction = null;
-    renderApp();
-    const textarea = document.querySelector('#commentForm textarea');
-    if (textarea) textarea.value = draft;
   }
 }
 
