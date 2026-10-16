@@ -1,0 +1,5 @@
+.wrap { width: calc(100% - 48px); max-width: none; }
+.panel { border-radius: 8px; box-shadow: none; }
+@media (orientation: landscape) and (min-width: 900px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
