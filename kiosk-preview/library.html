@@ -864,6 +864,7 @@
     }
 
     function showAiLoading() {
+      scrollToResults("aiResults");
       document.getElementById("aiResults").innerHTML = `
         <div class="loading">
           <div class="spinner"></div>
@@ -918,6 +919,7 @@
     }
 
     function showLoading() {
+      scrollToResults("searchResultsStart");
       document.getElementById("notice").innerHTML = "";
       const controls = document.getElementById("categoryControls");
       if (controls) controls.innerHTML = "";
