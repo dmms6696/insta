@@ -624,7 +624,7 @@
       <div id="aiResults" class="ai-results"></div>
     </section>
 
-    <div class="result-head">
+    <div class="result-head" id="searchResultsStart">
       <div class="result-title" id="resultTitle">추천 도서</div>
     </div>
 
@@ -872,8 +872,20 @@
       `;
     }
 
+    function scrollToResults(id) {
+      const active = document.activeElement;
+      if (active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName)) active.blur();
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+          block: 'start'
+        });
+      });
+    }
+
     function renderAiRecommendations(data) {
       setAiBusy(false);
+      scrollToResults("aiResults");
 
       const results = data.results || [];
       const note = data.aiNote || data.message || "";
@@ -895,6 +907,7 @@
 
     function showAiError(error) {
       setAiBusy(false);
+      scrollToResults("aiResults");
       console.error(error);
       document.getElementById("aiResults").innerHTML = `
         <div class="empty">
@@ -920,6 +933,7 @@
     }
 
     function renderResults(data) {
+      scrollToResults("searchResultsStart");
       const results = data.results || [];
       document.getElementById("results").className = results.length ? "grid" : "";
 
@@ -1114,6 +1128,7 @@
     }
 
     function showError(error) {
+      scrollToResults("searchResultsStart");
       console.error(error);
       document.getElementById("results").className = "";
       document.getElementById("results").innerHTML = `
